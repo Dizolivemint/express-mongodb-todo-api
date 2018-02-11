@@ -111,7 +111,6 @@ app.get('/users/me', authenticate, (req, res) => {
   res.send(req.user);
 });
 
-// POST /users/login {email, password}
 app.post('/users/login', (req, res) => {
   var body = _.pick(req.body, ['email', 'password']);
 
@@ -124,6 +123,13 @@ app.post('/users/login', (req, res) => {
   });
 });
 
+app.delete('/users/me/token', authenticate, (req, res) => {
+  req.user.removeToken(req.token).then(() => {
+    res.send(200)
+  }, () => {
+    res.send(400);
+  });
+});
 
 app.listen(port, () => {
   console.log(`Started on port ${port}`);
